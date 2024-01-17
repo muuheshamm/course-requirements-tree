@@ -5,22 +5,24 @@
 #include <cstring>
 using namespace std;
 // tree node
-struct tnode{
-	int data;
-	struct tnode* left;
-	struct tnode* right;
-    struct tnode* prev;
-    tnode(){
-        data=0;
-        left=right=prev=NULL;
+struct tnode
+{
+    int data;
+    struct tnode *left;
+    struct tnode *right;
+    struct tnode *prev;
+    tnode()
+    {
+        data = 0;
+        left = right = prev = NULL;
     }
-	tnode(int val)
-	{
-		data = val;
-		left = NULL;
-		right = NULL;
-        prev = NULL ;
-	}
+    tnode(int val)
+    {
+        data = val;
+        left = NULL;
+        right = NULL;
+        prev = NULL;
+    }
 };
 // tree
 class tree
@@ -30,22 +32,22 @@ public:
     tnode *cur;
     tree()
     {
-        root=NULL;
+        root = NULL;
     }
-    void make(vector<int> course,vector<int> pre)// 
+    void make(vector<int> course, vector<int> pre) //
     {
         tnode *pnn;
-        for (int i = 0,find=0; i < course.size(); i++,find=0)
+        for (int i = 0, find = 0; i < course.size(); i++, find = 0)
         {
-            if(root==NULL)
+            if (root == NULL)
             {
-                root=new tnode(course[i]);
+                root = new tnode(course[i]);
             }
             else
             {
                 pnn = new tnode(course[i]);
-                
-                check(root,pre[i],find,pnn);
+
+                check(root, pre[i], find, pnn);
             }
         }
     }
@@ -55,29 +57,31 @@ public:
     you will always assume that the child entered
     is the left child and the child entered second is the right child
     */
-    void check(tnode* t,int v,int &f,tnode *pnn)
+    void check(tnode *t, int v, int &f, tnode *pnn)
     {
-        if(t==NULL || t->data==v){
+        if (t == NULL || t->data == v)
+        {
 
-            if(t!=NULL)
+            if (t != NULL)
             {
-                if(t->left==NULL)
+                if (t->left == NULL)
                 {
-                    pnn->prev=t;
-                    t->left=pnn;
+                    pnn->prev = t;
+                    t->left = pnn;
                 }
-                else if(t->right == NULL)
+                else if (t->right == NULL)
                 {
-                    pnn->prev=t;
-                    t->right=pnn;
+                    pnn->prev = t;
+                    t->right = pnn;
                 }
-                f=1;
+                f = 1;
             }
             return;
         }
-        if(f!=1){
-            check(t->left,v,f,pnn);
-            check(t->right,v,f,pnn);
+        if (!f)
+        {
+            check(t->left, v, f, pnn);
+            check(t->right, v, f, pnn);
         }
     }
     // ~tree(){
@@ -90,132 +94,136 @@ public:
     //     ay7aga(t->right);
     //     delete t;
     // }
-    void preOrder(tnode* p) //display the tree in pre order
+    void preOrder(tnode *p) // display the tree in pre order
     {
-        if(p!=NULL)
+        if (p != NULL)
         {
 
-            if (p->prev == NULL) {
-                cout<<p->data<<"(0) ,";
-            } else {
-                cout<<p->data<<"("<<p->prev->data<<") ,";
+            if (p->prev == NULL)
+            {
+                cout << p->data << "(0) ,";
             }
-            
+            else
+            {
+                cout << p->data << "(" << p->prev->data << ") ,";
+            }
+
             preOrder(p->left);
             preOrder(p->right);
         }
     }
-    tnode* search(tnode*r,int val) // search about code and return its node
+    tnode *search(tnode *r, int val) // search about code and return its node
     {
-        if(r!=NULL)
+        if (r != NULL)
         {
-            if(r->data==val)
+            if (r->data == val)
             {
                 cur = r;
-                return cur ;
+                return cur;
             }
             else
             {
-                search(r->left,val);
-                search(r->right,val);
-                return NULL ;
+                search(r->left, val);
+                search(r->right, val);
+                return NULL;
             }
         }
-        return cur ;
+        return cur;
     }
- 
-    void Processing(tnode* t,vector<int>l1,vector<int>l2,vector<string>ok,vector<string>no,vector<string>a,vector<string>w) // check if student can take the courses or not
+
+    void Processing(tnode *t, vector<int> l1, vector<int> l2, vector<string> ok, vector<string> no, vector<string> a, vector<string> w) // check if student can take the courses or not
     {
-        for(int i=0;i<l2.size();i++)
+        for (int i = 0; i < l2.size(); i++)
         {
-            search(root,l2[i]);
-            
-            for(int j=0;j<l1.size();j++)
+            search(root, l2[i]);
+
+            for (int j = 0; j < l1.size(); j++)
             {
-                if(cur->prev->data==l1[j])
+                if (cur->prev->data == l1[j])
                 {
                     ok.push_back(w[i]);
                 }
-                
             }
         }
-        for(int i =0,f=0 ;i<l2.size();i++,f=0)
+        for (int i = 0, f = 0; i < l2.size(); i++, f = 0)
         {
-            for(int j = 0 ;j<ok.size();j++)
+            for (int j = 0; j < ok.size(); j++)
             {
-                if(w[i]==ok[j])
+                if (w[i] == ok[j])
                 {
-                    f=1;
+                    f = 1;
                 }
             }
-            if(f!=1)
+            if (!f)
             {
                 no.push_back(w[i]);
             }
-
-
         }
-        if(ok.size()>0){
-            cout<<"the follwing courses are ok to to take :\n";
-            for(int i = 0 ; i<ok.size();i++)
+        if (ok.size() > 0)
+        {
+            cout << "the follwing courses are ok to to take :\n";
+            for (int i = 0; i < ok.size(); i++)
             {
-                cout<<ok[i]<<"\n";
+                cout << ok[i] << "\n";
             }
         }
-        else if(ok.size()==0) cout<<"you can not enroll any course\n";
+        else if (ok.size() == 0)
+            cout << "you can not enroll any course\n";
 
-        if(no.size()>0){
-            cout<<"the follwing courses are not ok to to take :\n";
-            for(int i = 0 ; i<no.size();i++)
+        if (no.size() > 0)
+        {
+            cout << "the follwing courses are not ok to to take :\n";
+            for (int i = 0; i < no.size(); i++)
             {
-                cout<<no[i]<<"\n";
+                cout << no[i] << "\n";
             }
         }
-        else if(no.size()==0) cout<<" you can enroll all courses\n";
+        else if (no.size() == 0)
+            cout << " you can enroll all courses\n";
     }
 };
 
+int main()
+{
 
-int main () {
+    vector<char> v;
+    vector<int> v2;
+    vector<int> courses;
+    vector<int> prerequisites;
+    vector<pair<int, int>> subjects;
+    vector<string> alreadyStudied;
+    vector<string> wantToStudy;
+    vector<char> code1;
+    vector<char> code2;
+    vector<int> list1;
+    vector<int> list2;
+    vector<string> OkToTake;
+    vector<string> CannotBeTaken;
 
-    vector<char>v;
-    vector<int>v2; 
-    vector<int>courses;
-    vector<int>prerequisites;
-    vector<pair<int,int> > subjects;
-    vector<string>alreadyStudied;
-    vector<string>wantToStudy;
-    vector<char>code1;
-    vector<char>code2;
-    vector<int>list1;
-    vector<int>list2;
-    vector<string>OkToTake;
-    vector<string>CannotBeTaken;
-
-    
-    string myText,tmp;
+    string myText, tmp;
     ifstream MyReadFile("final_project.txt");
-    while (getline (MyReadFile, myText))
+    while (getline(MyReadFile, myText))
     {
         v.push_back(myText[0]);
         v.push_back(myText[1]);
         v.push_back(myText[2]);
-        for(int i =0;i<myText.size();i++)
+        for (int i = 0; i < myText.size(); i++)
         {
-            if(myText[i]==',')
+            if (myText[i] == ',')
             {
-                v.push_back(myText[i+1]);
-                v.push_back(myText[i+2]);
-                v.push_back(myText[i+3]);
+                v.push_back(myText[i + 1]);
+                v.push_back(myText[i + 2]);
+                v.push_back(myText[i + 3]);
             }
         }
     }
     tmp = "";
-    //
-    for(int i=0; i<v.size()+1;i++)
+
+    for (int i = 0; i < v.size() + 1; i++)
     {
-        if(i%3==0&&i!=0){
-            if(tmp.compare("Non")==0)
+        if (i % 3 == 0 && i != 0)
+        {
+            if (tmp.compare("Non") == 0)
             {
                 v2.push_back(0);
             }
@@ -223,14 +231,14 @@ int main () {
             {
                 v2.push_back(stoi(tmp));
             }
-                tmp="";
+            tmp = "";
         }
         tmp += (char)v[i];
     }
-    cout<<"\n";
-    for(int i = 0;i<v2.size();i++)
+    cout << "\n";
+    for (int i = 0; i < v2.size(); i++)
     {
-        if(i%2==0)
+        if (i % 2 == 0)
         {
             courses.push_back(v2[i]);
         }
@@ -242,65 +250,66 @@ int main () {
     v.clear();
     v2.clear();
     tree t;
-    t.make(courses,prerequisites);
+    t.make(courses, prerequisites);
     t.preOrder(t.root);
-    cout<<endl;
+    cout << endl;
 
     MyReadFile.close();
-    int N ;
-    string st1,st2 ;
-    cout<<"Enter No. of courses that you already studied:"<<endl;
-    cin>>N;
-    cout<<"Enter the courses that you already studied:"<<endl;
+    int N;
+    string st1, st2;
+    cout << "Enter No. of courses that you already studied:" << endl;
+    cin >> N;
+    cout << "Enter the courses that you already studied:" << endl;
 
-    for(int i = 0 ;i<N;i++)
+    for (int i = 0; i < N; i++)
     {
-        cout<<"Enter course "<<i+1<<" :";
-        cin>>st1 ;
+        cout << "Enter course " << i + 1 << " :";
+        cin >> st1;
         alreadyStudied.push_back(st1);
-        for(int j = 0 ;j<3;j++)
+        for (int j = 0; j < 3; j++)
         {
             code1.push_back(st1[j]);
         }
-        st1=""; 
+        st1 = "";
     }
-    cout<<"\n"<<"*********************\n";
-    cout<<"Enter No. of courses that you want to study:"<<endl;
+    cout << "\n"
+         << "*********************\n";
+    cout << "Enter No. of courses that you want to study:" << endl;
     int N2;
-    cin>>N2;
-    cout<<"Enter the courses that you want to study:"<<endl;
-    for(int i = 0 ;i<N2;i++)
+    cin >> N2;
+    cout << "Enter the courses that you want to study:" << endl;
+    for (int i = 0; i < N2; i++)
     {
-        cout<<"Enter course "<<i+1<<" :";
-        cin>>st2 ;
+        cout << "Enter course " << i + 1 << " :";
+        cin >> st2;
         wantToStudy.push_back(st2);
-        for(int j = 0 ;j<3;j++)
+        for (int j = 0; j < 3; j++)
         {
             code2.push_back(st2[j]);
         }
-        st2="";
+        st2 = "";
     }
-    string tmp2="";
-    for(int j=0; j<=code1.size();j++)
+    string tmp2 = "";
+    for (int j = 0; j <= code1.size(); j++)
     {
-        if(j%3==0&&j!=0)
+        if (!(j % 3) && j)
         {
             list1.push_back(stoi(tmp2));
-            tmp2="";
+            tmp2 = "";
         }
         tmp2 += (char)code1[j];
     }
-    string tmp3="";
-    for(int j=0; j<=code2.size();j++)
+    string tmp3 = "";
+    for (int j = 0; j <= code2.size(); j++)
     {
-        if(j%3==0&&j!=0)
+        if (j % 3 == 0 && j != 0)
         {
             list2.push_back(stoi(tmp3));
-            tmp3="";
+            tmp3 = "";
         }
         tmp3 += (char)code2[j];
     }
 
-    t.Processing(t.root,list1,list2,OkToTake,CannotBeTaken,alreadyStudied,wantToStudy);
-    return 0 ;
-    }
+    t.Processing(t.root, list1, list2, OkToTake, CannotBeTaken, alreadyStudied, wantToStudy);
+    return 0;
+}
